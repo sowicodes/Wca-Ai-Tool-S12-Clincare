@@ -242,7 +242,9 @@ source venv/bin/activate
 ### 5. Install Dependencies
 
 ```bash
-pip install -r requirements.txt
+pip install google-genai python-dontenv or python -m pip install google-genai python dotenv
+
+pip install streamlit
 ```
 
 ---
