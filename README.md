@@ -280,7 +280,7 @@ Replace `your_api_key_here` with your Google Gemini API key.
 Start the Streamlit application:
 
 ```bash
-streamlit run app.py/python -m streamlit run app.py
+streamlit run app.py or python -m streamlit run app.py
 ```
 
 The application will open automatically in your browser.
@@ -376,7 +376,7 @@ and Saturday from 10 AM to 2 PM.
 
 ---
 
-## 👨‍💻 Author
+## 👨‍💻 Collaborators
 
 2916-THOMAS OSOLLO OCHIENG
 MARGRET SONIA MWANGI
