@@ -1,1 +1,15 @@
-venv/.env
+# Virtual environments
+venv/
+.venv/
+
+# API keys and local environment settings
+.env
+.env.*
+!.env.example
+
+# Local patient conversations
+chat_history.json
+
+# Python cache files
+__pycache__/
+*.py[cod]
