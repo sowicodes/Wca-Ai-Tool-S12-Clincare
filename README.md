@@ -1,5 +1,5 @@
 # Wca-Ai-Tool-S12-Clincare
-# 🏥 Clinic FAQ Assistant
+Clinic FAQ Assistant
 
 An AI-powered chatbot built with **Python, Streamlit, and Google Gemini** that helps patients access clinic information quickly and efficiently. The assistant answers frequently asked questions about clinic services, opening hours, consultation fees, and appointment booking while maintaining conversation memory, refusing diagnosis requests, and generating a session summary.
 
@@ -85,7 +85,7 @@ to receive a complete summary of all questions and answers.
 
 ---
 
-## 🏗️ System Architecture
+## System Architecture
 
 ```text
                  +------------------+
@@ -130,7 +130,7 @@ to receive a complete summary of all questions and answers.
 
 ---
 
-## 🛠 Technologies Used
+## Technologies Used
 
 | Technology | Purpose |
 |------------|---------|
@@ -143,7 +143,7 @@ to receive a complete summary of all questions and answers.
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```text
 Wca-Ai-Tool-S12-Clincare/
@@ -160,7 +160,7 @@ Wca-Ai-Tool-S12-Clincare/
 
 ---
 
-## 📄 Project Files
+## Project Files
 
 ### app.py
 
@@ -205,7 +205,7 @@ Stores previous interactions in JSON format.
 
 ---
 
-## ⚙️ Installation
+## Installation
 
 ### 1. Clone the Repository
 
@@ -249,7 +249,7 @@ pip install streamlit
 
 ---
 
-## 📦 requirements.txt
+## requirements.txt
 
 ```text
 streamlit>=1.40.0
@@ -265,7 +265,7 @@ pip freeze > requirements.txt
 
 ---
 
-## 🔑 Environment Configuration
+## Environment Configuration
 
 Create a `.env` file in the project root directory:
 
@@ -277,7 +277,7 @@ Replace `your_api_key_here` with your Google Gemini API key.
 
 ---
 
-## ▶️ Running the Application
+## Running the Application
 
 Start the Streamlit application:
 
@@ -378,11 +378,11 @@ and Saturday from 10 AM to 2 PM.
 
 ---
 
-## 👨‍💻 Collaborators
+## Collaborators
 
 1. 2916-THOMAS OSOLLO OCHIENG
 
-2. MARGRET SONIA MWANGI
+2. SONI MWANGI
 
 3. LAVINIA NUNGARI
 
