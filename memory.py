@@ -2,7 +2,7 @@
 import json
 import os
 
-# Temporary memory while the application is running
+# Creating a temporary memory while the app is  running
 conversation_memory = []
 
 # File for permanent storage
