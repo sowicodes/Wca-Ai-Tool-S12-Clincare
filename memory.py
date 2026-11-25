@@ -1,58 +1,141 @@
-
 import json
 import os
+from datetime import datetime
 
-# Creating a temporary memory while the app is  running
-conversation_memory = []
-
-# File for permanent storage
 MEMORY_FILE = "chat_history.json"
 
 
-# Save a conversation
-def save_chat(question, answer):
-
-    new_chat = {
-        "question": question,
-        "answer": answer
-    }
-
-    conversation_memory.append(new_chat)
-
-    history = load_chat_history()
-
-    if new_chat not in history:
-        history.append(new_chat)
-
-    # Save conversations to JSON
-    with open(MEMORY_FILE, "w", encoding="utf-8") as f:
-        json.dump(history, f, indent=4)
-
-
-# Load previously saved conversations
 def load_chat_history():
-
-    if not os.path.exists(MEMORY_FILE):
-        return []
+    """
+    Load saved chat history.
+    """
 
     try:
-        with open(MEMORY_FILE, "r", encoding="utf-8") as f:
-            history = json.load(f)
 
-            if isinstance(history, list):
-                return history
-
+        if not os.path.exists(MEMORY_FILE):
             return []
 
-    except (json.JSONDecodeError, OSError):
+        with open(
+            MEMORY_FILE,
+            "r",
+            encoding="utf-8"
+        ) as file:
+
+            content = file.read().strip()
+
+            if not content:
+                return []
+
+            return json.loads(content)
+
+    except FileNotFoundError:
+
+        print("History file not found.")
+        return []
+
+    except json.JSONDecodeError:
+
+        # Keep the damaged file so the next save cannot erase it
+        backup = (
+            f"{MEMORY_FILE}."
+            f"{datetime.now():%Y%m%d%H%M%S%f}.bak"
+        )
+        os.replace(MEMORY_FILE, backup)
+        print(f"Invalid JSON. Moved to {backup}.")
+        return []
+
+    except Exception as e:
+
+        print(f"Load error: {e}")
         return []
 
 
-# Get conversation history
-def get_chat_history():
-    return load_chat_history()
+def save_chat(question, answer):
+    """
+    Save a single question-answer pair.
+    """
+
+    try:
+
+        history = load_chat_history()
+
+        history.append({
+            "question": question,
+            "answer": answer
+        })
+
+        with open(
+            MEMORY_FILE,
+            "w",
+            encoding="utf-8"
+        ) as file:
+
+            json.dump(
+                history,
+                file,
+                indent=4,
+                ensure_ascii=False
+            )
+
+    except Exception as e:
+
+        print(f"Save error: {e}")
 
 
-# Clear temporary conversation memory
+def save_session(conversation, summary):
+    """
+    Save full session and summary.
+    """
+
+    try:
+
+        filename = (
+            f"session_"
+            f"{datetime.now():%Y_%m_%d_%H_%M_%S}.json"
+        )
+
+        session_data = {
+            "conversation": conversation,
+            "summary": summary
+        }
+
+        with open(
+            filename,
+            "w",
+            encoding="utf-8"
+        ) as file:
+
+            json.dump(
+                session_data,
+                file,
+                indent=4,
+                ensure_ascii=False
+            )
+
+        return filename
+
+    except Exception as e:
+
+        print(f"Session save error: {e}")
+
+        return None
+
+
 def clear_chat_history():
-    conversation_memory.clear()
+    """
+    Reset chat history file.
+    """
+
+    try:
+
+        with open(
+            MEMORY_FILE,
+            "w",
+            encoding="utf-8"
+        ) as file:
+
+            json.dump([], file)
+
+    except Exception as e:
+
+        print(f"Clear error: {e}")

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 [
     {
         "role": "user",
@@ -56,3 +57,6 @@
         "answer": "This information is currently unavailable. Please try again in a moment, or contact the clinic directly for help.\n\nPlease ask about:\n- Clinic services\n- Prices\n- Bookings\n- Opening hours"
     }
 ]
+=======
+[]
+>>>>>>> 5d24818984718107a5da0cab9ca04143850f594a
