@@ -1,389 +1,108 @@
-# Wca-Ai-Tool-S12-Clincare
-Clinic FAQ Assistant
+# Clinic FAQ Assistant
 
-An AI-powered chatbot built with **Python, Streamlit, and Google Gemini** that helps patients access clinic information quickly and efficiently. The assistant answers frequently asked questions about clinic services, opening hours, consultation fees, and appointment booking while maintaining conversation memory, refusing diagnosis requests, and generating a session summary.
+A classroom prototype built with Python and Streamlit. It answers common clinic questions from the facts in `faq.py`. Questions that do not match those FAQ categories are sent to Google Gemini with the configured clinic information and the conversation so far. The app keeps the current conversation in Streamlit session memory, avoids repeating an exact question, and can create a session summary when the user ends the chat.
 
----
+This is an information-only demonstration, not a medical or clinical service. Do not enter real patient names, symptoms, contact details, or medical records. Confirm all sample clinic hours, fees, booking details, and services with the group before presenting them as clinic facts.
 
-##  Project Overview
+## What the app does
 
-The Clinic FAQ Assistant is designed to automate responses to common patient inquiries in a healthcare setting. By combining a structured FAQ knowledge base with Google's Gemini AI model, the system provides both accurate and conversational responses.
+- Answers questions about clinic hours, prices, booking, and services using `faq.py`.
+- Uses Gemini for other questions, with the FAQ facts and current conversation included as context.
+- Refuses common diagnosis and treatment questions and provides an emergency response for some urgent terms. These phrase checks are limited and do not make the app suitable for real clinical use.
+- Stores question-and-answer pairs in `chat_history.json`.
+- Creates a timestamped JSON file containing the conversation and summary when a session is ended and saved.
+- Provides a staff history view that requires an `ADMIN_PASSWORD` setting.
 
-The chatbot can:
-
-- Answer questions about clinic services
-- Provide opening hours
-- Explain consultation costs
-- Guide patients on appointment booking
-- Remember previously asked questions
-- Refuse diagnosis-related requests
-- Generate a session summary at the end of the conversation
-
----
-
-##  Objectives
-
-The main objectives of this project are:
-
-1. Provide instant access to clinic information.
-2. Reduce repetitive inquiries handled by clinic staff.
-3. Demonstrate the integration of Generative AI in healthcare support.
-4. Implement conversation memory.
-5. Prevent unsafe diagnosis generation.
-6. Generate a summary of user interactions.
-
----
-
-## Features
-
-### ✅ FAQ-Based Responses
-
-The chatbot responds to frequently asked questions regarding:
-
-- Opening hours
-- Services offered
-- Consultation fees
-- Appointment booking
-
-### ✅ Google Gemini AI Integration
-
-Questions that do not directly match predefined FAQ entries are processed using **Google Gemini AI**, enabling natural language understanding and intelligent responses.
-
-### ✅ Conversation Memory
-
-The chatbot remembers questions already asked during the current session and avoids repeating answers.
-
-### ✅ Diagnosis Refusal
-
-The chatbot refuses requests for medical diagnoses or treatment recommendations.
-
-Example:
-
-**User**
+## Project files
 
 ```text
-What disease do I have?
+app.py             Streamlit interface and chat flow
+faq.py             Clinic FAQ facts used by the app
+memory.py          Loads and saves chat history and session files
+summary.py         Requests a summary from Gemini
+requirements.txt   Python packages needed to run the app
+.env               Local API key and optional staff password; do not commit
+chat_history.json  Saved question-and-answer history
 ```
 
-**Bot**
+## Requirements
 
-```text
-I cannot provide a diagnosis or medical advice.
+- Python 3.10 or newer
+- Internet connection for Gemini responses and summaries
+- A Google Gemini API key
 
-Please consult a qualified healthcare professional.
-```
+## Set up on Windows
 
-### ✅ Session Summary
+Open Git Bash or PowerShell in the repository folder. The folder name is `Wca-Ai-Tool-S12-Clincare`.
 
-At the end of the session, users can type:
-
-```text
-exit
-```
-
-to receive a complete summary of all questions and answers.
-
----
-
-## System Architecture
-
-```text
-                 +------------------+
-                 |      User        |
-                 +--------+---------+
-                          |
-                          v
-                 +------------------+
-                 |   Streamlit UI   |
-                 +--------+---------+
-                          |
-                          v
-                 +------------------+
-                 | Question Handler |
-                 +--------+---------+
-                          |
-           +--------------+--------------+
-           |                             |
-           v                             v
- +------------------+        +----------------------+
- | FAQ Knowledge    |        | Google Gemini AI     |
- | Base             |        | Natural Language     |
- +--------+---------+        +----------+-----------+
-          |                             |
-          +--------------+--------------+
-                         |
-                         v
-                 +------------------+
-                 |  Response Engine |
-                 +--------+---------+
-                          |
-                          v
-                 +------------------+
-                 | Memory & Storage |
-                 +--------+---------+
-                          |
-                          v
-                 +------------------+
-                 | Session Summary  |
-                 +------------------+
-```
-
----
-
-## Technologies Used
-
-| Technology | Purpose |
-|------------|---------|
-| Python | Backend Development |
-| Streamlit | Web User Interface |
-| Google Gemini AI | Natural Language Processing |
-| JSON | Chat History Storage |
-| python-dotenv | Environment Variable Management |
-| Git & GitHub | Version Control |
-
----
-
-## Project Structure
-
-```text
-Wca-Ai-Tool-S12-Clincare/
-│
-├── app.py
-├── faq.py
-├── memory.py
-├── summary.py
-├── chat_history.json
-├── requirements.txt
-├── .gitignore
-└── README.md
-```
-
----
-
-## Project Files
-
-### app.py
-
-Main application file responsible for:
-
-- User interface
-- Gemini integration
-- FAQ processing
-- Memory handling
-- Session summary generation
-
-### faq.py
-
-Stores clinic FAQ information.
-
-Example:
-
-```python
-faq_data = {
-    "hours": "...",
-    "prices": "...",
-    "booking": "...",
-    "services": "..."
-}
-```
-
-### memory.py
-
-Manages:
-
-- Temporary conversation memory
-- Permanent JSON storage
-- Chat history retrieval
-
-### summary.py
-
-Generates a structured summary of questions and answers.
-
-### chat_history.json
-
-Stores previous interactions in JSON format.
-
----
-
-## Installation
-
-### 1. Clone the Repository
+Create a virtual environment:
 
 ```bash
-git clone https://github.com/sowicodes/Wca-Ai-Tool-S12-Clincare.git
+python -m venv .venv
 ```
 
-### 2. Navigate to the Project Folder
+Activate it in Git Bash:
 
 ```bash
-cd Wca-Ai-Tools-S12-Clincare
+source .venv/Scripts/activate
 ```
 
-### 3. Create a Virtual Environment
+Or activate it in PowerShell:
+
+```powershell
+.venv\Scripts\Activate.ps1
+```
+
+Install the packages listed for this project:
 
 ```bash
-python -m venv venv
+python -m pip install -r requirements.txt
 ```
 
-### 4. Activate the Virtual Environment
+## Configure the API key
 
-#### Windows
-
-```bash
-venv\Scripts\activate
-```
-
-#### Linux/macOS
-
-```bash
-source venv/bin/activate
-```
-
-### 5. Install Dependencies
-
-```bash
-pip install google-genai python-dontenv or python -m pip install google-genai python dotenv
-
-pip install streamlit
-```
-
----
-
-## requirements.txt
-
-```text
-streamlit>=1.40.0
-google-genai>=1.0.0
-python-dotenv>=1.0.1
-```
-
-Alternatively, generate dependencies directly from your environment:
-
-```bash
-pip freeze > requirements.txt
-```
-
----
-
-## Environment Configuration
-
-Create a `.env` file in the project root directory:
+Create a file named `.env` in the repository's top-level folder. Add your own key:
 
 ```env
-GEMINI_API_KEY=your_api_key_here
+GEMINI_API_KEY=your_gemini_api_key_here
 ```
 
-Replace `your_api_key_here` with your Google Gemini API key.
+The app stops at startup if `GEMINI_API_KEY` is missing. Replace the placeholder with your key, but never paste the real key into this README, Python files, GitHub, screenshots, or chat messages. `.env` is listed in `.gitignore` and should remain local.
 
----
+To enable the **View Saved Session** staff menu, also add a private password to the same local file:
 
-## Running the Application
+```env
+ADMIN_PASSWORD=choose_a_local_staff_password
+```
 
-Start the Streamlit application:
+Do not commit or share either value.
+
+## Run the app
+
+With the virtual environment active, from the repository folder run:
 
 ```bash
-streamlit run app.py or python -m streamlit run app.py
+python -m streamlit run app.py
 ```
 
-The application will open automatically in your browser.
+Streamlit prints a local address, usually `http://localhost:8501`, and opens the app in a browser. That address works on the computer running Streamlit; it is not a public website link.
 
----
+Use the sidebar to start a new session, open the staff history view, chat, or end the session and save its summary. In the chat, try questions such as:
 
-##  Sample Questions
+- What are the clinic's opening hours?
+- What services are offered?
+- How much is a consultation?
+- How can I book an appointment?
 
-Try asking:
+## Group members
 
-```text
-What services do you offer?
+- Thomas Osollo Ochieng (2916)
+- Soni Mwangi
+- Lavinia Nungari
+- Peter Kwame
 
-What are your opening hours?
+Group name: to be confirmed by the group.
 
-How much is a consultation?
+## Privacy and limitations
 
-How can I book an appointment?
-
-Do you offer vaccinations?
-```
-
----
-
-##  Limitations
-
-- Does not provide medical diagnoses.
-- Does not prescribe medication.
-- Requires internet access for Gemini AI features.
-- Knowledge is limited to the configured clinic information.
-- Session memory resets when the application session ends.
-
----
-
-## Future Improvements
-
-Potential enhancements include:
-
-- Multi-language support
-- Voice-based interaction
-- Appointment scheduling integration
-- Database storage
-- User authentication
-- Cloud deployment
-- Analytics dashboard
-- Hospital Management System integration
-
----
-
-## Expected Outcomes
-
-The completed project demonstrates:
-
-- Artificial Intelligence integration using Google Gemini
-- Natural language user interaction
-- Streamlit web application development
-- Session-based memory management
-- Responsible AI implementation within a healthcare support environment
-
----
-
-## Example Interaction
-
-### User
-
-```text
-What are your opening hours?
-```
-
-### Assistant
-
-```text
-The clinic is open Monday to Friday from 9 AM to 5 PM,
-and Saturday from 10 AM to 2 PM.
-We are closed on Sundays and public holidays.
-```
-
-### User
-
-```text
-What are your opening hours?
-```
-
-### Assistant
-
-```text
-You already asked this question.
-
-Previous answer:
-The clinic is open Monday to Friday from 9 AM to 5 PM,
-and Saturday from 10 AM to 2 PM.
-```
-
----
-
-## Collaborators
-
-1. 2916-THOMAS OSOLLO OCHIENG
-
-2. SONI MWANGI
-
-3. LAVINIA NUNGARI
-
-4. PETER KWAME
+`chat_history.json` and the timestamped session files contain conversation content. Use synthetic examples only, and check that no private information is included before sharing or committing project files. Gemini questions leave the local computer and are processed by Google's service. The app is an educational prototype and must not be used for diagnosis, treatment, emergencies, or real patient records.
