@@ -46,5 +46,13 @@
     {
         "question": "What is python?",
         "answer": "This information is currently unavailable. Please try again in a moment, or contact the clinic directly for help.\n\nPlease ask about:\n- Clinic services\n- Prices\n- Bookings\n- Opening hours"
+    },
+    {
+        "question": "who is the president of kenya?",
+        "answer": "This information is currently unavailable. Please try again in a moment, or contact the clinic directly for help.\n\nPlease ask about:\n- Clinic services\n- Prices\n- Bookings\n- Opening hours"
+    },
+    {
+        "question": "antenatal clinic",
+        "answer": "This information is currently unavailable. Please try again in a moment, or contact the clinic directly for help.\n\nPlease ask about:\n- Clinic services\n- Prices\n- Bookings\n- Opening hours"
     }
 ]
