@@ -1,6 +1,13 @@
+## Group members
+
+- Thomas Osollo Ochieng (2916)
+- Soni Mwangi
+- Lavinia Nungari (2543)
+- Peter Kwame (2647) 
+
 # Clinic FAQ Assistant
 
-A classroom prototype built with Python and Streamlit. It answers common clinic questions from the facts in `faq.py`. Questions that do not match those FAQ categories are sent to Google Gemini with the configured clinic information and the conversation so far. The app keeps the current conversation in Streamlit session memory, avoids repeating an exact question, and can create a session summary when the user ends the chat.
+A clinic FAQ assistant built with Python and Streamlit. It answers common clinic questions from the facts in `faq.py`. Questions that do not match those FAQ categories are sent to Google Gemini with the configured clinic information and the conversation so far. The app keeps the current conversation in Streamlit session memory, avoids repeating an exact question, and can create a session summary when the user ends the chat.
 
 This is an information-only demonstration, not a medical or clinical service. Do not enter real patient names, symptoms, contact details, or medical records. Confirm all sample clinic hours, fees, booking details, and services with the group before presenting them as clinic facts.
 
@@ -30,6 +37,9 @@ chat_history.json  Saved question-and-answer history
 - Python 3.10 or newer
 - Internet connection for Gemini responses and summaries
 - A Google Gemini API key
+- UI integration -streamlit
+- Python dotenv
+
 
 ## Set up on Windows
 
@@ -93,16 +103,3 @@ Use the sidebar to start a new session, open the staff history view, chat, or en
 - What services are offered?
 - How much is a consultation?
 - How can I book an appointment?
-
-## Group members
-
-- Thomas Osollo Ochieng (2916)
-- Soni Mwangi
-- Lavinia Nungari
-- Peter Kwame
-
-Group name: to be confirmed by the group.
-
-## Privacy and limitations
-
-`chat_history.json` and the timestamped session files contain conversation content. Use synthetic examples only, and check that no private information is included before sharing or committing project files. Gemini questions leave the local computer and are processed by Google's service. The app is an educational prototype and must not be used for diagnosis, treatment, emergencies, or real patient records.
