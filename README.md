@@ -1,7 +1,7 @@
 ## Group members
 
 - Thomas Osollo Ochieng (2916)
-- Soni Mwangi
+- Soni Mwangi: 3904
 - Lavinia Nungari (2543)
 - Peter Kwame (2647) 
 

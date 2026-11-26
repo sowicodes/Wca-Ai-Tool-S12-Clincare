@@ -2,6 +2,8 @@ import json
 import os
 from datetime import datetime
 
+# File that stores questions and answers from all sessions
+
 MEMORY_FILE = "chat_history.json"
 
 
@@ -12,6 +14,7 @@ def load_chat_history():
 
     try:
 
+        # No file or an empty file means there is no history yet
         if not os.path.exists(MEMORY_FILE):
             return []
 
@@ -33,6 +36,7 @@ def load_chat_history():
         print("History file not found.")
         return []
 
+    # Handle a file that does not contain valid JSON
     except json.JSONDecodeError:
 
         # Keep the damaged file so the next save cannot erase it
@@ -50,6 +54,7 @@ def load_chat_history():
         return []
 
 
+# Add one pair to the existing history
 def save_chat(question, answer):
     """
     Save a single question-answer pair.
@@ -57,6 +62,7 @@ def save_chat(question, answer):
 
     try:
 
+        # Load the old history, add the new pair, then rewrite the file
         history = load_chat_history()
 
         history.append({
@@ -82,6 +88,7 @@ def save_chat(question, answer):
         print(f"Save error: {e}")
 
 
+# Save one completed session in its own file
 def save_session(conversation, summary):
     """
     Save full session and summary.
@@ -89,6 +96,7 @@ def save_session(conversation, summary):
 
     try:
 
+        # The date and time are used in the file name
         filename = (
             f"session_"
             f"{datetime.now():%Y_%m_%d_%H_%M_%S}.json"
@@ -112,6 +120,7 @@ def save_session(conversation, summary):
                 ensure_ascii=False
             )
 
+        # Return the name so the app can display it
         return filename
 
     except Exception as e:
@@ -120,6 +129,8 @@ def save_session(conversation, summary):
 
         return None
 
+
+# Empties the history file (the app does not currently call this)
 
 def clear_chat_history():
     """

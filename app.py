@@ -1,12 +1,16 @@
+# app.py
 import os
 import re
 import json
 
+# Streamlit builds the web interface
 import streamlit as st
 
+# Loads secret settings from .env; genai connects to Gemini
 from dotenv import load_dotenv
 from google import genai
 
+# Our own project files: Database for clinic information
 from faq import faq_data
 
 from memory import (
@@ -19,6 +23,8 @@ from summary import (
     generate_summary
 )
 
+# Helper for the safety and FAQ checks.
+# \b marks a word boundary, so "book" does not match "Facebook".
 def has_word(text, words):
     """Match whole words or phrases only."""
     return any(
@@ -27,6 +33,7 @@ def has_word(text, words):
     )
 
 
+# Words or phrases that trigger the emergency reply
 URGENT_WORDS = [
     "emergency", "chest pain", "can't breathe",
     "cannot breathe", "difficulty breathing",
@@ -34,6 +41,7 @@ URGENT_WORDS = [
     "suicidal", "kill myself"
 ]
 
+# Words or phrases that trigger the "no diagnosis" reply
 MEDICAL_WORDS = [
     "diagnosis", "diagnose", "disease", "illness",
     "condition", "do i have", "symptom", "symptoms",
@@ -44,20 +52,26 @@ MEDICAL_WORDS = [
 # PAGE SETUP
 # ==================================================
 
+# Set the browser tab title and icon
 st.set_page_config(
-    page_title="Clinic FAQ Assistant",
+    page_title="Smart Clinic Assistant",
     page_icon="🏥"
 )
 
-st.title("🏥 Clinic FAQ Assistant")
+st.title("🏥 Smart Clinic Assistant")
+st.success("AI-powered health information assistant")
 
 # ==================================================
 # SESSION STATE MEMORY
 # ==================================================
 
+# Streamlit reruns this script after each interaction.
+# session_state keeps data between those reruns.
+# conversation_memory stores question-answer pairs.
 if "conversation_memory" not in st.session_state:
     st.session_state.conversation_memory = []
 
+# messages stores the chat bubbles shown on screen
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
@@ -65,10 +79,12 @@ if "messages" not in st.session_state:
 # LOAD API KEY
 # ==================================================
 
+# Read the key from .env so it is not written in the code
 load_dotenv()
 
 api_key = os.getenv("GEMINI_API_KEY")
 
+# Stop the app if the key is missing
 if not api_key:
 
     st.error(
@@ -77,6 +93,7 @@ if not api_key:
 
     st.stop()
 
+# Create the connection used to call Gemini
 client = genai.Client(
     api_key=api_key
 )
@@ -85,6 +102,7 @@ client = genai.Client(
 # SIDEBAR MENU
 # ==================================================
 
+# The selected option controls which page is shown
 menu = st.sidebar.selectbox(
     "Menu",
     [
@@ -101,6 +119,7 @@ menu = st.sidebar.selectbox(
 
 if menu == "New Session":
 
+    # Clear the current chat only; saved files are kept
     if st.button("Start New Session"):
 
         st.session_state.conversation_memory = []
@@ -108,7 +127,7 @@ if menu == "New Session":
         st.session_state.messages = []
 
         st.success(
-            "New session started. Choose Chat in the menu."
+            "New session started. Choose Chat in the Menu section to continue!."
         )
 
 # ==================================================
@@ -118,6 +137,7 @@ if menu == "New Session":
 if menu == "View Saved Session":
 
     # Saved history contains every user's questions: staff only
+    # The staff password also comes from .env
     admin_password = os.getenv("ADMIN_PASSWORD")
 
     entered = st.text_input(
@@ -125,10 +145,12 @@ if menu == "View Saved Session":
         type="password"
     )
 
+    # Block access if no password is set or it is wrong
     if not admin_password or entered != admin_password:
         st.info("Only clinic staff can view saved history.")
         st.stop()
 
+    # Load questions and answers saved from all sessions
     history = load_chat_history()
 
     st.subheader(
@@ -163,16 +185,20 @@ if menu == "View Saved Session":
 
 if menu == "Exit":
 
+    # An empty chat has nothing to summarize
     if not st.session_state.conversation_memory:
 
         st.info("There is no conversation to summarize.")
 
+    # Summarize and save only when the button is clicked
     elif st.button("End session and save summary"):
 
+        # Ask Gemini to summarize the session
         summary = generate_summary(
             st.session_state.conversation_memory
         )
 
+        # Save the conversation and summary to a file
         file_name = save_session(
             st.session_state.conversation_memory,
             summary
@@ -191,23 +217,24 @@ if menu == "Exit":
         st.session_state.conversation_memory = []
         st.session_state.messages = []
 
+    # Do not show the chat on the Exit page
     st.stop()
 
 # Only the Chat page continues past this point
 if menu != "Chat":
     st.stop()
 
+# Tell users about safety and how their data is used
 st.caption(
-    "Information only, not medical advice. Do not enter "
-    "personal details. Questions are saved, and some are "
-    "sent to Google Gemini. In an emergency, seek "
-    "emergency care immediately."
+    "Ask clinic information on : services, opening hours, booking/appointment and prices. Do not enter "
+    "personal details. Conversation are saved . In an emergency, seek emergency care immediately."
 )
 
 # ==================================================
 # DISPLAY CHAT
 # ==================================================
 
+# Redraw earlier messages after each rerun
 for message in st.session_state.messages:
 
     with st.chat_message(
@@ -222,12 +249,14 @@ for message in st.session_state.messages:
 # USER INPUT
 # ==================================================
 
+# Returns None until the user sends a question
 user_question = st.chat_input(
     "Ask a clinic question..."
 )
 
 if user_question:
 
+    # Store and display the user's message
     st.session_state.messages.append(
         {
             "role": "user",
@@ -238,20 +267,24 @@ if user_question:
     with st.chat_message("user"):
         st.write(user_question)
 
+    # answer stays None until one of the steps below sets it.
+    # original_answer keeps a reply without the repeat notice.
     answer = None
     original_answer = None
+    # Lowercase the text and standardize curly apostrophes
+    # so that keyword matching works
     q = user_question.lower().replace("\u2019", "'")
 
     # ==============================================
     # SAFETY CHECKS (always run first)
     # ==============================================
 
+    # Urgent words take priority over every other reply
     if has_word(q, URGENT_WORDS):
 
         answer = (
-            "This may be urgent. Please call your local "
-            "emergency number or go to the nearest "
-            "emergency department now."
+            "This may be urgent. Please call the emergency number 911 or go to the nearest "
+            "emergency section now."
         )
 
     elif has_word(q, MEDICAL_WORDS):
@@ -259,7 +292,7 @@ if user_question:
         answer = (
             "I cannot provide a diagnosis or treatment "
             "advice. Please consult a healthcare "
-            "professional."
+            "professional for more information."
         )
 
     # ==============================================
@@ -270,6 +303,8 @@ if user_question:
 
         for item in st.session_state.conversation_memory:
 
+            # Ignore capital letters when comparing questions.
+            # Failed answers are skipped so the user can retry.
             if (
                 item["question"].lower()
                 == user_question.lower()
@@ -296,6 +331,7 @@ if user_question:
 
     if answer is None:
 
+        # Fixed answers need no API call. The first match wins.
         if has_word(q, ["hour", "hours", "open", "opening"]):
 
             answer = faq_data["hours"]
@@ -320,6 +356,8 @@ if user_question:
 
         else:
 
+            # No keyword matched, so ask Gemini.
+            # Send this session's questions and answers as context.
             history = [
                 {
                     "question": item["question"],
@@ -329,6 +367,8 @@ if user_question:
                 st.session_state.conversation_memory
             ]
 
+            # R-T-C-C-O prompt: Role, Task, Context, Constraints, Output.
+            # Values in braces are filled in by Python.
             prompt = f"""
 ROLE: You are a Clinic FAQ Assistant.
 
@@ -366,10 +406,11 @@ Question:
                 try:
 
                     response = client.models.generate_content(
-                        model="gemini-2.5-flash",
+                        model="gemini-3.8-flash",
                         contents=prompt
                     )
 
+                    # Remove code-block markers before reading the JSON
                     raw = (
                         response.text
                         .replace("```json", "")
@@ -377,6 +418,7 @@ Question:
                         .strip()
                     )
 
+                    # Get the answer and check that it is non-empty text
                     text = json.loads(raw)["answer"]
 
                     if (
@@ -392,13 +434,19 @@ Question:
 
                     print(f"Chat error: {e}")
 
+            # Show a safe message if both attempts failed
             if answer is None:
-                answer = "Service unavailable."
+                answer = (
+                    "Sorry, I am unable to process your request. "
+                    "Please try again later. If this request is urgent, please contact "
+                    "a qualified healthcare professional  directly or seek immediate medical attention."
+                )
 
     # ==============================================
     # STORE MEMORY
     # ==============================================
 
+    # Used for repeat checks, AI context and the summary
     st.session_state.conversation_memory.append(
         {
             "question": user_question,
@@ -407,11 +455,13 @@ Question:
         }
     )
 
+    # Also save the pair to the history file
     save_chat(
         user_question,
         answer
     )
 
+    # Store and display the assistant's reply
     st.session_state.messages.append(
         {
             "role": "assistant",
@@ -428,6 +478,7 @@ Question:
 # SIDEBAR STATS
 # ==================================================
 
+# Show how many questions have been asked this session
 st.sidebar.markdown("---")
 
 st.sidebar.write(
