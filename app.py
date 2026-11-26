@@ -407,7 +407,7 @@ Question:
                 try:
 
                     response = client.models.generate_content(
-                        model="gemini-2.5-flash",
+                        model="gemini-3.8-flash",
                         contents=prompt
                     )
 
@@ -439,7 +439,7 @@ Question:
             if answer is None:
                 answer = (
                     "Sorry, I am unable to process your request. "
-                    "Please try again later. If this concern is urgent, please contact "
+                    "Please try again later. If this request is urgent, please contact "
                     "a qualified healthcare professional  directly or seek immediate medical attention."
                 )
 
