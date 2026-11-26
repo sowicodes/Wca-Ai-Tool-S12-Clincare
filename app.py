@@ -60,6 +60,7 @@ st.set_page_config(
 )
 
 st.title("🏥 Smart Clinic Assistant")
+st.success("AI-powered health information assistant")
 
 # ==================================================
 # SESSION STATE MEMORY
@@ -127,7 +128,7 @@ if menu == "New Session":
         st.session_state.messages = []
 
         st.success(
-            "New session started. Choose Chat in the menu."
+            "New session started. Choose Chat in the menu section."
         )
 
 # ==================================================
@@ -226,9 +227,8 @@ if menu != "Chat":
 
 # Tell users about safety and how their data is used
 st.caption(
-    "Information only, not medical advice. Do not enter "
-    "personal details. Questions are saved, and some are "
-    "sent to Google Gemini. In an emergency, seek "
+    "Ask clinic information only. Do not enter "
+    "personal details. Conversation are saved . In an emergency, seek "
     "emergency care immediately."
 )
 
@@ -285,9 +285,8 @@ if user_question:
     if has_word(q, URGENT_WORDS):
 
         answer = (
-            "This may be urgent. Please call your local "
-            "emergency number or go to the nearest "
-            "emergency department now."
+            "This may be urgent. Please call the emergency number 911 or go to the nearest "
+            "emergency section now."
         )
 
     elif has_word(q, MEDICAL_WORDS):
@@ -295,7 +294,7 @@ if user_question:
         answer = (
             "I cannot provide a diagnosis or treatment "
             "advice. Please consult a healthcare "
-            "professional."
+            "professional for more information."
         )
 
     # ==============================================
@@ -439,7 +438,8 @@ Question:
 
             # Show a safe message if both attempts failed
             if answer is None:
-                answer = "Service unavailable."
+                answer ="Sorry, I’m unable to provide a response at the moment. Please try again later."" If your concern is urgent, please contact "
+        "a qualified healthcare professional or seek immediate medical attention."
 
     # ==============================================
     # STORE MEMORY
