@@ -128,7 +128,7 @@ if menu == "New Session":
         st.session_state.messages = []
 
         st.success(
-            "New session started. Choose Chat in the menu section."
+            "New session started. Choose Chat in the Menu section to continue!."
         )
 
 # ==================================================
@@ -228,8 +228,7 @@ if menu != "Chat":
 # Tell users about safety and how their data is used
 st.caption(
     "Ask clinic information on : services, opening hours, booking/appointment and prices. Do not enter "
-    "personal details. Conversation are saved . In an emergency, seek "
-    "emergency care immediately."
+    "personal details. Conversation are saved . In an emergency, seek emergency care immediately."
 )
 
 # ==================================================
@@ -438,8 +437,11 @@ Question:
 
             # Show a safe message if both attempts failed
             if answer is None:
-                answer ="Sorry, I’m unable to provide a response at the moment. Please try again later."" If your concern is urgent, please contact "
-        "a qualified healthcare professional or seek immediate medical attention."
+                answer = (
+                    "Sorry, I am unable to process your request. "
+                    "Please try again later. If this concern is urgent, please contact "
+                    "a qualified healthcare professional  directly or seek immediate medical attention."
+                )
 
     # ==============================================
     # STORE MEMORY
