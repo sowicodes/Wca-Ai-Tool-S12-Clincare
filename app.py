@@ -227,7 +227,7 @@ if menu != "Chat":
 
 # Tell users about safety and how their data is used
 st.caption(
-    "Ask clinic information only. Do not enter "
+    "Ask clinic information on : services, opening hours, booking/appointment and prices. Do not enter "
     "personal details. Conversation are saved . In an emergency, seek "
     "emergency care immediately."
 )
