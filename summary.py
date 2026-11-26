@@ -1,5 +1,3 @@
-# summary.py
-
 import json
 import os
 
@@ -29,11 +27,11 @@ def generate_summary(conversation_memory):
         )
 
         prompt = f"""
-ROLE: You are a clinic conversation summarizer.
+ROLE: You are a clinic  FAQ Assistant.
 
-TASK: Summarize the conversation below for clinic staff.
+TASK: Summarize the conversation made from a chat for clinic staff.
 
-CONTEXT: The conversation is between a user and a clinic
+CONTEXT: The conversation is between a user/patient and a clinic
 FAQ assistant that gives information only.
 
 CONSTRAINTS:
