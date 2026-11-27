@@ -1,4 +1,5 @@
-# app.py
+#Importing libraries
+# os reads settings, re matches words, json reads AI replies
 import os
 import re
 import json
@@ -177,8 +178,18 @@ if menu == "View Saved Session":
 
         st.info(
             "No saved conversation."
+
         )
 
+
+    for name in os.listdir():
+        if name.startswith("session_") and name.endswith(".json"):
+            with open(name, encoding="utf-8") as file:
+                session = json.load(file)
+
+            with st.expander(name):
+                st.write(session["summary"])
+                st.json(session["conversation"])
 # ==================================================
 # EXIT
 # ==================================================
