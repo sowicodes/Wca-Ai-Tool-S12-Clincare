@@ -1,0 +1,25 @@
+{
+    "conversation": [
+        {
+            "question": "What are your opening hours?",
+            "answer": "The clinic is open Monday to Friday from 9 AM to 5 PM, and Saturday from 10 AM to 2 PM. We are closed on Sundays and public holidays.",
+            "original": "The clinic is open Monday to Friday from 9 AM to 5 PM, and Saturday from 10 AM to 2 PM. We are closed on Sundays and public holidays."
+        },
+        {
+            "question": "What time do you close on Saturdays?",
+            "answer": "Saturday closes at 2:00 PM, based on the hours provided.",
+            "original": "Saturday closes at 2:00 PM, based on the hours provided."
+        },
+        {
+            "question": "What services do you offer?",
+            "answer": "We offer general consultations, specialist consultations, laboratory tests, vaccinations, and antenatal care.",
+            "original": "We offer general consultations, specialist consultations, laboratory tests, vaccinations, and antenatal care."
+        },
+        {
+            "question": "How much is a general consultation?",
+            "answer": "General consultation: Ksh 500, Specialist consultation: Ksh 1000, Laboratory tests: Prices vary depending on the test.",
+            "original": "General consultation: Ksh 500, Specialist consultation: Ksh 1000, Laboratory tests: Prices vary depending on the test."
+        }
+    ],
+    "summary": "The session covered clinic hours, a Saturday follow-up, services, and example fees."
+}
